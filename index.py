@@ -1,21 +1,18 @@
+# app.py
 import bottle
-from bottle import route, run, Response, template
-import json
+from bottle import route, template
 import image
 
+app = bottle.Bottle()
+
 def call_service():
-    directoryName = 'photos'
+    directoryName = "photos"
     image.process(directoryName)
 
-@route('/')
+@app.route('/')
 def index():
-    """Home page"""
-    title = "Image Processor App"
     call_service()
-    return template('index.tpl',data="Request completed!", title=title)
+    return template('index.tpl', data="Request completed", title="Image Processor App")
 
-if __name__ == '__main__':
-	run(host='0.0.0.0', port=8000, debug=False, reloader=True)
-	
-serverApp = bottle.default_app()
-app = serverApp
+if __name__ == "__main__":
+    bottle.run(app=app, host="0.0.0.0", port=8000)
